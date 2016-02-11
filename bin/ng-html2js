@@ -29,6 +29,10 @@ var argv = optimist.usage('Usage: $0 <input file> <output file>')
     .alias('h', 'help')
     .boolean('h')
     .describe('h', 'Shows usage message; what you are looking at.')
+
+    .alias('a', 'autoname')
+    .boolean('a')
+    .describe('a', 'Generate output file name based in the input path. <output file> will be set to <input file>.js')
     .argv;
 
 if (argv._.length === 0 || argv.help) {
@@ -42,6 +46,7 @@ var moduleName = argv.m;
 var moduleVar = argv['module-var'];
 var baseDir = argv.b;
 var prefixToStrip = argv.s;
+var autoname = argv.a;
 
 //
 // Main script
@@ -65,7 +70,13 @@ if (prefixToStrip) {
 inputAlias = inputAlias.replace(/\\/g, '/');
 var output = html2js(inputAlias, content, moduleName, moduleVar);
 
+if (autoname && !outputFile){
+  outputFile = inputFile;
+  outputFile += '.js';
+}
+
 if (outputFile) {
+  console.log("write: " + outputFile);
   fs.writeFileSync(outputFile, output, 'utf8');
 } else {
   console.log(output);

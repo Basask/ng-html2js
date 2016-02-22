@@ -76,7 +76,6 @@ if (autoname && !outputFile){
 }
 
 if (outputFile) {
-  console.log("write: " + outputFile);
   fs.writeFileSync(outputFile, output, 'utf8');
 } else {
   console.log(output);
